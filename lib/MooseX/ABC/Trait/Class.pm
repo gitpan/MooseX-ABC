@@ -1,5 +1,5 @@
 package MooseX::ABC::Trait::Class;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Moose::Role;
 use MooseX::AttributeHelpers;
@@ -10,7 +10,7 @@ MooseX::ABC::Trait::Class - metaclass trait for L<MooseX::ABC>
 
 =head1 VERSION
 
-version 0.01
+version 0.02
 
 =head1 DESCRIPTION
 
@@ -62,6 +62,11 @@ around _immutable_options => sub {
     # so it's safe to replace it if there is only one wrapper.
     elsif ($constructor->isa('Class::MOP::Method::Wrapped')
         && $constructor->get_original_method == Class::MOP::class_of('Moose::Object')->get_method('new')) {
+        push @options, replace_constructor => 1;
+    }
+    # if our parent has been inlined and we have no required methods, then it's
+    # safe to inline ourselves
+    elsif ($constructor->isa('Moose::Meta::Method::Constructor')) {
         push @options, replace_constructor => 1;
     }
     return @options;
