@@ -1,8 +1,8 @@
 package MooseX::ABC::Trait::Class;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
+
 
 use Moose::Role;
-use MooseX::AttributeHelpers;
 
 =head1 NAME
 
@@ -10,7 +10,7 @@ MooseX::ABC::Trait::Class - metaclass trait for L<MooseX::ABC>
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 DESCRIPTION
 
@@ -19,26 +19,34 @@ dying if a subclass doesn't implement the required methods.
 
 =cut
 
+has is_abstract => (
+    is      => 'rw',
+    isa     => 'Bool',
+    default => 0,
+);
+
 has required_methods => (
-    metaclass  => 'Collection::Array',
+    traits     => ['Array'],
     is         => 'ro',
     isa        => 'ArrayRef[Str]',
     default    => sub { [] },
     auto_deref => 1,
-    provides   => {
-        push  => 'add_required_method',
-        empty => 'has_required_methods',
+    handles    => {
+        add_required_method  => 'push',
+        has_required_methods => 'count',
     },
 );
 
 after _superclasses_updated => sub {
     my $self = shift;
+    return if $self->is_abstract;
     my @supers = $self->linearized_isa;
     shift @supers;
     for my $superclass (@supers) {
         my $super_meta = Class::MOP::class_of($superclass);
         next unless $super_meta->meta->can('does_role')
                  && $super_meta->meta->does_role('MooseX::ABC::Trait::Class');
+        next unless $super_meta->is_abstract;
         for my $method ($super_meta->required_methods) {
             if (!$self->find_method_by_name($method)) {
                 my $classname = $self->name;
@@ -55,7 +63,7 @@ around _immutable_options => sub {
     my $self = shift;
     my @options = $self->$orig(@_);
     my $constructor = $self->find_method_by_name('new');
-    if ($self->has_required_methods) {
+    if ($self->is_abstract) {
         push @options, inline_constructor => 0;
     }
     # we know that the base class has at least our base class role applied,
@@ -64,7 +72,7 @@ around _immutable_options => sub {
         && $constructor->get_original_method == Class::MOP::class_of('Moose::Object')->get_method('new')) {
         push @options, replace_constructor => 1;
     }
-    # if our parent has been inlined and we have no required methods, then it's
+    # if our parent has been inlined and we are not abstract, then it's
     # safe to inline ourselves
     elsif ($constructor->isa('Moose::Meta::Method::Constructor')) {
         push @options, replace_constructor => 1;

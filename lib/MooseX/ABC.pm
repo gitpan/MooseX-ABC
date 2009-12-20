@@ -1,9 +1,9 @@
 package MooseX::ABC;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
+
 
 use Moose ();
 use Moose::Exporter;
-use Moose::Util::MetaRole;
 
 =head1 NAME
 
@@ -11,17 +11,23 @@ MooseX::ABC - abstract base classes for Moose
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 SYNOPSIS
 
   package Shape;
+our $VERSION = '0.03';
+
+
   use Moose;
   use MooseX::ABC;
 
   requires 'draw';
 
   package Circle;
+our $VERSION = '0.03';
+
+
   use Moose;
   extends 'Shape';
 
@@ -33,16 +39,24 @@ version 0.02
   my $circle = Circle->new; # succeeds
 
   package Square;
+our $VERSION = '0.03';
+
+
   use Moose;
   extends 'Shape'; # dies, since draw is unimplemented
 
 =head1 DESCRIPTION
 
-This module adds basic abstract base class functionality to Moose. Doing
-C<use MooseX::ABC> turns the using class into an abstract class - it cannot be
+This module adds basic abstract base class functionality to Moose. Doing C<use
+MooseX::ABC> turns the using class into an abstract class - it cannot be
 instantiated. It also allows you to mark certain methods in the class as
 L</required>, meaning that if a class inherits from this class without
-implementing that method, it will die at compile time.
+implementing that method, it will die at compile time. Abstract subclasses are
+exempt from this, however - if you extend a class with another class which uses
+C<MooseX::ABC>, it will not be required to implement every required method (and
+it can also add more required methods of its own). Only concrete classes
+(classes which do not use C<MooseX::ABC>) are required to implement all of
+their ancestors' required methods.
 
 =cut
 
@@ -59,34 +73,24 @@ here, an error will be thrown when compiling the class.
 =cut
 
 sub requires {
-    my $caller = shift;
-    my $meta = Class::MOP::class_of($caller);
-    $meta->add_required_method($_) for @_;
+    shift->add_required_method(@_);
 }
 
-Moose::Exporter->setup_import_methods(
-    with_caller => [qw(requires)],
+my ($import, $unimport, $init_meta) = Moose::Exporter->build_import_methods(
+    with_meta        => [qw(requires)],
+    install          => [qw(import unimport)],
+    metaclass_roles  => ['MooseX::ABC::Trait::Class'],
+    base_class_roles => ['MooseX::ABC::Role::Object'],
 );
 
 sub init_meta {
-    shift;
-    my %options = @_;
-    Moose->init_meta(%options);
-    Moose::Util::MetaRole::apply_base_class_roles(
-        for_class       => $options{for_class},
-        roles           => ['MooseX::ABC::Role::Object'],
-    );
-    Moose::Util::MetaRole::apply_metaclass_roles(
-        for_class       => $options{for_class},
-        metaclass_roles => ['MooseX::ABC::Trait::Class'],
-    );
-    return Class::MOP::class_of($options{for_class});
+    my ($package, %options) = @_;
+    Carp::confess("Can't make a role into an abstract base class")
+        if Class::MOP::class_of($options{for_class})->isa('Moose::Meta::Role');
+    my $ret = $init_meta->(@_);
+    Class::MOP::class_of($options{for_class})->is_abstract(1);
+    return $ret;
 }
-
-=head1 TODO
-
-Probably want a way to extend abstract classes without dying, making the
-inheriting class abstract.
 
 =head1 BUGS
 
