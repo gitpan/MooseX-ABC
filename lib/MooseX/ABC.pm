@@ -1,7 +1,5 @@
 package MooseX::ABC;
-our $VERSION = '0.03';
-
-
+our $VERSION = '0.04';
 use Moose ();
 use Moose::Exporter;
 
@@ -11,23 +9,17 @@ MooseX::ABC - abstract base classes for Moose
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 SYNOPSIS
 
   package Shape;
-our $VERSION = '0.03';
-
-
   use Moose;
   use MooseX::ABC;
 
   requires 'draw';
 
   package Circle;
-our $VERSION = '0.03';
-
-
   use Moose;
   extends 'Shape';
 
@@ -39,9 +31,6 @@ our $VERSION = '0.03';
   my $circle = Circle->new; # succeeds
 
   package Square;
-our $VERSION = '0.03';
-
-
   use Moose;
   extends 'Shape'; # dies, since draw is unimplemented
 

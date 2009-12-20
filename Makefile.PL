@@ -11,7 +11,7 @@ WriteMakefile(
   NAME      => 'MooseX::ABC',
   AUTHOR    => "Jesse\ Luehrs\ \<doy\ at\ tozt\ dot\ net\>",
   ABSTRACT  => "abstract\ base\ classes\ for\ Moose",
-  VERSION   => '0.03',
+  VERSION   => '0.04',
   EXE_FILES => [ qw() ],
   (eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => 'perl') : ()),
   PREREQ_PM    => {

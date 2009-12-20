@@ -2,7 +2,7 @@
 abstract: 'abstract base classes for Moose'
 author:
   - 'Jesse Luehrs <doy at tozt dot net>'
-generated_by: 'Dist::Zilla version 1.093220'
+generated_by: 'Dist::Zilla version 1.093400'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -11,4 +11,4 @@ name: MooseX-ABC
 requires:
   Moose: 0.90
   Test::Exception: 0
-version: 0.03
+version: 0.04
