@@ -1,21 +1,10 @@
 package MooseX::ABC::Trait::Class;
-our $VERSION = '0.04';
+BEGIN {
+  $MooseX::ABC::Trait::Class::VERSION = '0.05';
+}
 use Moose::Role;
+# ABSTRACT: metaclass trait for L<MooseX::ABC>
 
-=head1 NAME
-
-MooseX::ABC::Trait::Class - metaclass trait for L<MooseX::ABC>
-
-=head1 VERSION
-
-version 0.04
-
-=head1 DESCRIPTION
-
-This is a metaclass trait for L<MooseX::ABC> which implements the behavior of
-dying if a subclass doesn't implement the required methods.
-
-=cut
 
 has is_abstract => (
     is      => 'rw',
@@ -80,45 +69,44 @@ around _immutable_options => sub {
 
 no Moose::Role;
 
-=head1 SUPPORT
+1;
 
-You can find this documentation for this module with the perldoc command.
+__END__
+=pod
 
-    perldoc MooseX::ABC
+=head1 NAME
 
-You can also look for information at:
+MooseX::ABC::Trait::Class - metaclass trait for L<MooseX::ABC>
+
+=head1 VERSION
+
+version 0.05
+
+=head1 DESCRIPTION
+
+This is a metaclass trait for L<MooseX::ABC> which implements the behavior of
+dying if a subclass doesn't implement the required methods.
+
+=head1 SEE ALSO
 
 =over 4
 
-=item * AnnoCPAN: Annotated CPAN documentation
+=item *
 
-L<http://annocpan.org/dist/MooseX-ABC>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/MooseX-ABC>
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=MooseX-ABC>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/MooseX-ABC>
+L<MooseX::ABC>
 
 =back
 
 =head1 AUTHOR
 
-  Jesse Luehrs <doy at tozt dot net>
+Jesse Luehrs <doy at tozt dot net>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2009 by Jesse Luehrs.
+This software is copyright (c) 2010 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
-the same terms as perl itself.
+the same terms as the Perl 5 programming language system itself.
 
 =cut
 
-1;

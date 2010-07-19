@@ -1,7 +1,40 @@
 package MooseX::ABC;
-our $VERSION = '0.04';
+BEGIN {
+  $MooseX::ABC::VERSION = '0.05';
+}
 use Moose ();
 use Moose::Exporter;
+# ABSTRACT: abstract base classes for Moose
+
+
+
+sub requires {
+    shift->add_required_method(@_);
+}
+
+my ($import, $unimport, $init_meta) = Moose::Exporter->build_import_methods(
+    with_meta        => [qw(requires)],
+    install          => [qw(import unimport)],
+    class_metaroles  => {
+        class        => ['MooseX::ABC::Trait::Class'],
+    },
+    base_class_roles => ['MooseX::ABC::Role::Object'],
+);
+
+sub init_meta {
+    my ($package, %options) = @_;
+    Carp::confess("Can't make a role into an abstract base class")
+        if Class::MOP::class_of($options{for_class})->isa('Moose::Meta::Role');
+    my $ret = $init_meta->(@_);
+    Class::MOP::class_of($options{for_class})->is_abstract(1);
+    return $ret;
+}
+
+
+1;
+
+__END__
+=pod
 
 =head1 NAME
 
@@ -9,7 +42,7 @@ MooseX::ABC - abstract base classes for Moose
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 SYNOPSIS
 
@@ -47,11 +80,7 @@ it can also add more required methods of its own). Only concrete classes
 (classes which do not use C<MooseX::ABC>) are required to implement all of
 their ancestors' required methods.
 
-=cut
-
-=head1 EXPORTS
-
-=cut
+=head1 FUNCTIONS
 
 =head2 requires METHOD_NAMES
 
@@ -59,27 +88,7 @@ Takes a list of methods that classes inheriting from this one must implement.
 If a class inherits from this class without implementing each method listed
 here, an error will be thrown when compiling the class.
 
-=cut
-
-sub requires {
-    shift->add_required_method(@_);
-}
-
-my ($import, $unimport, $init_meta) = Moose::Exporter->build_import_methods(
-    with_meta        => [qw(requires)],
-    install          => [qw(import unimport)],
-    metaclass_roles  => ['MooseX::ABC::Trait::Class'],
-    base_class_roles => ['MooseX::ABC::Role::Object'],
-);
-
-sub init_meta {
-    my ($package, %options) = @_;
-    Carp::confess("Can't make a role into an abstract base class")
-        if Class::MOP::class_of($options{for_class})->isa('Moose::Meta::Role');
-    my $ret = $init_meta->(@_);
-    Class::MOP::class_of($options{for_class})->is_abstract(1);
-    return $ret;
-}
+=for Pod::Coverage   init_meta
 
 =head1 BUGS
 
@@ -91,7 +100,17 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=MooseX-ABC>.
 
 =head1 SEE ALSO
 
-L<Moose>, L<Moose::Role>
+=over 4
+
+=item *
+
+L<Moose>
+
+=item *
+
+L<Moose::Role>
+
+=back
 
 =head1 SUPPORT
 
@@ -123,15 +142,14 @@ L<http://search.cpan.org/dist/MooseX-ABC>
 
 =head1 AUTHOR
 
-  Jesse Luehrs <doy at tozt dot net>
+Jesse Luehrs <doy at tozt dot net>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2009 by Jesse Luehrs.
+This software is copyright (c) 2010 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
-the same terms as perl itself.
+the same terms as the Perl 5 programming language system itself.
 
 =cut
 
-1;

@@ -1,6 +1,7 @@
 Changes
 LICENSE
 MANIFEST
+META.json
 META.yml
 Makefile.PL
 README
@@ -8,10 +9,13 @@ dist.ini
 lib/MooseX/ABC.pm
 lib/MooseX/ABC/Role/Object.pm
 lib/MooseX/ABC/Trait/Class.pm
-t/000-load.t
-t/001-basic.t
-t/002-immutable.t
-t/003-custom-constructor.t
-t/004-abstract-subclass.t
+t/00-compile.t
+t/01-basic.t
+t/02-immutable.t
+t/03-custom-constructor.t
+t/04-abstract-subclass.t
+t/release-eol.t
+t/release-no-tabs.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
+weaver.ini
