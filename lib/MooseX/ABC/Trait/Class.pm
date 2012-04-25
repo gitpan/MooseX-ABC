@@ -1,6 +1,9 @@
 package MooseX::ABC::Trait::Class;
 BEGIN {
-  $MooseX::ABC::Trait::Class::VERSION = '0.05';
+  $MooseX::ABC::Trait::Class::AUTHORITY = 'cpan:DOY';
+}
+{
+  $MooseX::ABC::Trait::Class::VERSION = '0.06';
 }
 use Moose::Role;
 # ABSTRACT: metaclass trait for L<MooseX::ABC>
@@ -80,22 +83,12 @@ MooseX::ABC::Trait::Class - metaclass trait for L<MooseX::ABC>
 
 =head1 VERSION
 
-version 0.05
+version 0.06
 
 =head1 DESCRIPTION
 
 This is a metaclass trait for L<MooseX::ABC> which implements the behavior of
 dying if a subclass doesn't implement the required methods.
-
-=head1 SEE ALSO
-
-=over 4
-
-=item *
-
-L<MooseX::ABC>
-
-=back
 
 =head1 AUTHOR
 
@@ -103,7 +96,7 @@ Jesse Luehrs <doy at tozt dot net>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Jesse Luehrs.
+This software is copyright (c) 2012 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

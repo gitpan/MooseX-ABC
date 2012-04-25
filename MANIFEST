@@ -10,12 +10,11 @@ lib/MooseX/ABC.pm
 lib/MooseX/ABC/Role/Object.pm
 lib/MooseX/ABC/Trait/Class.pm
 t/00-compile.t
-t/01-basic.t
-t/02-immutable.t
-t/03-custom-constructor.t
-t/04-abstract-subclass.t
+t/abstract-subclass.t
+t/basic.t
+t/custom-constructor.t
+t/immutable.t
 t/release-eol.t
 t/release-no-tabs.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t
-weaver.ini

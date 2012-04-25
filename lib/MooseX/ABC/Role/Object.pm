@@ -1,6 +1,9 @@
 package MooseX::ABC::Role::Object;
 BEGIN {
-  $MooseX::ABC::Role::Object::VERSION = '0.05';
+  $MooseX::ABC::Role::Object::AUTHORITY = 'cpan:DOY';
+}
+{
+  $MooseX::ABC::Role::Object::VERSION = '0.06';
 }
 use Moose::Role;
 # ABSTRACT: base object role for L<MooseX::ABC>
@@ -28,22 +31,12 @@ MooseX::ABC::Role::Object - base object role for L<MooseX::ABC>
 
 =head1 VERSION
 
-version 0.05
+version 0.06
 
 =head1 DESCRIPTION
 
 This is a base object role implementing the behavior of L<MooseX::ABC> classes
 being uninstantiable.
-
-=head1 SEE ALSO
-
-=over 4
-
-=item *
-
-L<MooseX::ABC>
-
-=back
 
 =head1 AUTHOR
 
@@ -51,7 +44,7 @@ Jesse Luehrs <doy at tozt dot net>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Jesse Luehrs.
+This software is copyright (c) 2012 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
